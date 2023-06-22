@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <header>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+    <title>TCC</title>
+    <meta name="viewport" content="width=device-width,inital-scale=1" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+      integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+      integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <link href="styles.css" rel="stylesheet" />
+  </header>
+
+  <body>
+    <div class="jumbotron">
+      <h1 class="display-5">Semáforo inteligente</h1>
+      <p class="lead">
+        Elaborar protótipo de semáforo inteligente controlado por um
+        supervisório remoto
+      </p>
+      <hr class="my-1" />
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-4">
+          <div class="tempoReal">
+            <h4>TEMPO REAL</h4>
+            <label> Rua Principal </label>
+            <input type="text" value="" id="countRuaPrincipal" />
+            <label> Rua Transversal </label>
+            <input type="text" value="" id="countRuaTransversal" />
+            <label> Tempo Verde Principal</label>
+            <input type="text" value="" id="tempoPrincipal" />
+            <label> Tempo Verde Transversal</label>
+            <input type="text" value="" id="tempoTransversal" />
+          </div>
+          <div class="opcao">
+            
+            <h4>OPÇÃO</h4>
+
+            <div id="radio" >
+                <input type="radio" class="radio" name="options" value="m1" id="option1" autocomplete="off" checked = "checked">
+                <label   for="option1">NORMAL</label>
+
+                <input type="radio" class="radio" name="options" value="m2" id="option2" autocomplete="off">
+                <label   for="option2">ALERTA</label>
+              
+                <input type="radio"   class="radio" name="options" value="m3" id="option3" autocomplete="off">
+                <label  for="option3">AUTOMÁTICO</label>
+              
+          </div>
+
+          </div>
+          <button class="btn-dark" value="*">Mudar</button>
+          <button onclick="gravar()">Gravar</button>
+          <button onclick="read()">Ler</button>
+        </div>
+        <div class="col-xl-3">
+          <div class="semaforo">
+            <div class="semaforoP">
+              <h6>Rua Principal</h6>
+              <img
+                class="imgsemaforo"
+                id="ruap"
+                src="img/semaforo/apagado.png"
+              />
+            </div>
+            <div class="semaforoS">
+              <h6>Rua Secundário</h6>
+              <img
+                class="imgsemaforo"
+                id="ruas"
+                src="img/semaforo/apagado.png"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xl-5">
+          <canvas id="grafico"></canvas>
+          <div class="col-md-1"></div>
+        </div>
+
+        <table class="col-xl-12">
+          <tr>
+            <th>DATA</th>
+            <th>HORA</th>
+            <th>RUA P</th>
+            <th>RUA S</th>
+            <th>TEMPO P</th>
+            <th>TEMPO S</th>
+          </tr>
+          <tr>
+            <td>22/05/2023</td>
+            <td>14:00</td>
+            <td>100</td>
+            <td>50</td>
+            <td>10</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>22/05/2023</td>
+            <td>14:00</td>
+            <td>100</td>
+            <td>50</td>
+            <td>10</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>22/05/2023</td>
+            <td>14:00</td>
+            <td>100</td>
+            <td>50</td>
+            <td>10</td>
+            <td>5</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-analytics.js"></script>
+    <script src="connect.js"></script>
+
+    <script src="grafico.js"></script>
+    <script src="btn.js"></script>
+    <script src="SensorRua.js"></script>
+  </body>
+</html>
